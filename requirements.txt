@@ -1,0 +1,6 @@
+fastapi~=0.115.6
+idu-config~=1.0.2
+idu-redis-client~=1.0.0
+loguru~=0.7.2
+uvicorn~=0.27.1
+gunicorn~=22.0.0
