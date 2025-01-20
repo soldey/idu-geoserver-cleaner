@@ -13,11 +13,11 @@ logger.add(
     level="INFO",
     colorize=True,
 )
+config = Config()
 logger.add(
-    f"logs/{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}.log",
+    f"{config.get('LOGS_DIR')}/{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}.log",
     format="<green>{time:MM-DD HH:mm:ss}</green> | <level>{level:<8}</level> | <cyan>{name}.{function}</cyan> - "
     "<level>{message}</level>",
 )
 
-config = Config()
 redis_service = RedisManager(config)
