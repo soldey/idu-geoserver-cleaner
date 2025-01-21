@@ -1,0 +1,10 @@
+services:
+  geoserver_cleaner:
+    container_name: geoserver_cleaner
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8000:8000
+    volumes:
+      - ./data_dir:/app/data_dir
