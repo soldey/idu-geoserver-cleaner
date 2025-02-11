@@ -9,13 +9,15 @@ from loguru import logger
 from src.dependencies import config, redis_service
 
 
-async def delete_layer(layer: str):
+async def delete_layer(workspace: str, layer: str):
+    if len(workspace) == 0 or len(layer) == 0:
+        logger.error("Workspace or layer name is empty")
     try:
         shutil.rmtree(
-            Path().absolute() / config.get("GEOSERVER_WORKSPACES_PATH") / config.get("GEOSERVER_WORKSPACE") / layer
+            Path().absolute() / config.get("GEOSERVER_WORKSPACES_PATH") / workspace / layer
         )
     except FileNotFoundError as e:
-        logger.info(e)
+        logger.error(e)
 
 
 async def main_worker_task():
@@ -34,5 +36,8 @@ async def main_worker_task():
 
         msg = await redis_service.get_message("clear_geoserver_layer")
         if msg:
-            asyncio.create_task(delete_layer(msg), name="clear-task")
+            try:
+                asyncio.create_task(delete_layer(*msg.split(":")), name="clear-task")
+            except Exception as e:
+                logger.error(e)
         await asyncio.sleep(2)
